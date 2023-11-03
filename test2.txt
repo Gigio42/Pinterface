@@ -1,0 +1,4 @@
+codCliente,Nome,CPF,Telefone,Endere√ßo,Cep,Cidade,estado
+0,P†,,,,,,
+1,,,,,,,
+2,aa,aa,aa,aa,aa,aa,aa

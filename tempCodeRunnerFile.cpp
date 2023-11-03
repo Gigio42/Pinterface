@@ -1,0 +1,2 @@
+
+    struct Cliente *clientes = NULL;
