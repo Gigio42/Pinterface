@@ -1,11 +1,10 @@
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -35,7 +34,7 @@ char cidade[20];
 char estado[2];
 */
 
-int codCliente = 2;
+int codCliente = 1;
 
 struct Cliente {
     char nome[20];
@@ -126,12 +125,7 @@ void printCadastrar(int currentChoice, Cliente *clientes) {
 
         switch (i) {
             case 1:
-            	if(codCliente != 0){
-            		printf(" [Codigo do cliente].: %i\n", codCliente);
-				}
-            	else{
-            		printf(" [Codigo do cliente].:\n");
-				}
+            	printf(" [Codigo do cliente].: %i\n", codCliente - 1);
                 break;
             case 2:
                 printf(" [Nome]..............: %s\n", clientes[codCliente].nome);
@@ -234,25 +228,61 @@ void printDonut() {
 }
 
 void sendToTxt(Cliente *clientes) {
-    FILE *fp = fopen("test2.txt", "w");
+    FILE *arquivoOriginal = fopen("test2.txt", "r");
+    FILE *arquivoNovo = fopen("temporario.txt", "w");
 
-    fprintf(fp, "codCliente,Nome,CPF,Telefone,Endereço,Cep,Cidade,estado\n");
+    int numeroLinha = codCliente - 1;
 
-    for(int i = 0; i < 3; i++){
-        fprintf(fp, "%i,%s,%s,%s,%s,%s,%s,%s\n", i, clientes[i].nome, clientes[i].cpf, clientes[i].telefone, clientes[i].endereco, clientes[i].cep, clientes[i].cidade, clientes[i].estado);
+    char buffer[1024];
+    int linhaAtual = 0;
+
+    while (fgets(buffer, sizeof(buffer), arquivoOriginal) != NULL) {
+        if (linhaAtual == numeroLinha) {
+            fprintf(arquivoNovo, "%i,%s,%s,%s,%s,%s,%s,%s\n", codCliente-1, clientes[codCliente].nome, clientes[codCliente].cpf, clientes[codCliente].telefone, clientes[codCliente].endereco, clientes[codCliente].cep, clientes[codCliente].cidade, clientes[codCliente].estado);
+        } else {
+            fprintf(arquivoNovo, "%s", buffer);
+        }
+        linhaAtual++;
     }
 
-    fclose(fp);
+    fclose(arquivoOriginal);
+    fclose(arquivoNovo);
+
+    remove("test2.txt");
+    rename("temporario.txt", "test2.txt");
 }
+
+void setCodCliente(){
+    FILE *arquivo = fopen("test2.txt", "r");
+
+    char buffer[1024];
+    int numeroLinha = 0;
+
+    while (fgets(buffer, sizeof(buffer), arquivo) != NULL) {
+        numeroLinha++;
+
+        size_t len = strlen(buffer);
+        if (len > 0 && buffer[len - 1] == '\n') {
+            buffer[len - 1] = '\0';
+        }
+
+        if (strlen(buffer) == 0) {
+            codCliente = numeroLinha;
+            break;
+        }
+    }
+
+    fclose(arquivo);
+}
+
 
 int main() {
 
     int numClientes = 100;
     struct Cliente *clientes = NULL;
-
     free(clientes);
-
     clientes = (struct Cliente *)malloc(numClientes * sizeof(struct Cliente));
+    setCodCliente();
 
     char key;
     do {
@@ -305,11 +335,13 @@ int main() {
                     				scanf(" %s", &clientes[codCliente].estado);
                     				break;
                                 case 10:
+                                    setCodCliente();
                                     sendToTxt(clientes);
                                     break;
                                     
                     			case 12:
                     				printf(">>> Saindo...");
+                                    choice = 1;
                     				escape = true;
 							}
 						}
@@ -339,7 +371,11 @@ int main() {
                     return 1;
                     break;
             }
-        } else {
+        } 
+        else if(key == 27){
+			return 1;
+		}
+        else {
             handleSelection(key);
         }
     } while (1);
