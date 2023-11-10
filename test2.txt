@@ -1,8 +1,15 @@
 codCliente,Nome,CPF,Telefone,Endereço,Cep,Cidade,estado
 1,tranca,,,,,,
-2,aba,,,,,,
+2,fr,,,,,,
 3,aa,,,,,,
-
-
+4,just,,,,,,
+5,aa,,,,,,
+6,aa,,,,,,
+7,aa,,,,,,
+8,aaa,,,,,,
+9,a,,,,,,
+10,aa,,,,,,
+11,aaaa,,,,,,
+12,aaaa,,,,,,
 
 

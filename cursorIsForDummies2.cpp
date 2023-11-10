@@ -125,7 +125,7 @@ void printCadastrar(int currentChoice, Cliente *clientes) {
 
         switch (i) {
             case 1:
-            	printf(" [Codigo do cliente].: %i\n", codCliente - 1);
+            	printf(" [Codigo do cliente].: %i\n", codCliente);
                 break;
             case 2:
                 printf(" [Nome]..............: %s\n", clientes[codCliente].nome);
@@ -227,18 +227,18 @@ void printDonut() {
     }
 }
 
-void sendToTxt(Cliente *clientes) {
+void sendToTxtFile(Cliente *clientes) {
     FILE *arquivoOriginal = fopen("test2.txt", "r");
     FILE *arquivoNovo = fopen("temporario.txt", "w");
 
-    int numeroLinha = codCliente - 1;
+    int numeroLinha = codCliente;
 
     char buffer[1024];
     int linhaAtual = 0;
 
     while (fgets(buffer, sizeof(buffer), arquivoOriginal) != NULL) {
         if (linhaAtual == numeroLinha) {
-            fprintf(arquivoNovo, "%i,%s,%s,%s,%s,%s,%s,%s\n", codCliente-1, clientes[codCliente].nome, clientes[codCliente].cpf, clientes[codCliente].telefone, clientes[codCliente].endereco, clientes[codCliente].cep, clientes[codCliente].cidade, clientes[codCliente].estado);
+            fprintf(arquivoNovo, "%i,%s,%s,%s,%s,%s,%s,%s\n", codCliente, clientes[codCliente].nome, clientes[codCliente].cpf, clientes[codCliente].telefone, clientes[codCliente].endereco, clientes[codCliente].cep, clientes[codCliente].cidade, clientes[codCliente].estado);
         } else {
             fprintf(arquivoNovo, "%s", buffer);
         }
@@ -267,7 +267,7 @@ void setCodCliente(){
         }
 
         if (strlen(buffer) == 0) {
-            codCliente = numeroLinha;
+            codCliente = numeroLinha - 1;
             break;
         }
     }
@@ -278,7 +278,7 @@ void setCodCliente(){
 
 int main() {
 
-    int numClientes = 100;
+    int numClientes = 50;
     struct Cliente *clientes = NULL;
     free(clientes);
     clientes = (struct Cliente *)malloc(numClientes * sizeof(struct Cliente));
@@ -335,8 +335,8 @@ int main() {
                     				scanf(" %s", &clientes[codCliente].estado);
                     				break;
                                 case 10:
+                                    sendToTxtFile(clientes);
                                     setCodCliente();
-                                    sendToTxt(clientes);
                                     break;
                                     
                     			case 12:
