@@ -1,15 +1,15 @@
 codCliente,Nome,CPF,Telefone,Endereço,Cep,Cidade,estado
-1,tranca,,,,,,
-2,fr,,,,,,
-3,aa,,,,,,
-4,just,,,,,,
-5,aa,,,,,,
-6,aa,,,,,,
-7,aa,,,,,,
-8,aaa,,,,,,
-9,a,,,,,,
-10,aa,,,,,,
-11,aaaa,,,,,,
-12,aaaa,,,,,,
+1,Fulano,173.283.182-12,(99)17384-3823,R.foo,3271-218,S�o_Paulo,SP
+2,Deutrano,www,(11)32932-0432,R.foo,9421-384,Indaiatuba,SP
+3,aaa,,,,,,
+4,aa,,,,,,
+5,teste,123,321,431,,,
+6,aaa,bbb,ccc,ddd,eee,fff,gg
+7,hhh,iii,jjj,kkk,lll,mmm,nn
+8,,123.123.123-1,(11)99340-032,231312312312312312312,,,
+9,,123.123.123-12,,,,,
+10,,,,,,,
+
+
 
 
