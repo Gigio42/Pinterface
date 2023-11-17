@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 
+#define MAX_LENGTH 100
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -27,19 +29,39 @@ int codCliente = 1;
 struct Cliente {
     char nome[20];
     char cpf[15];
-    char telefone[14];
+    char telefone[15];
     char endereco[30];
-    char cep[9];
+    char cep[10];
     char cidade[20];
-    char estado[2];
+    char estado[3];
 };
+
+typedef struct {
+    int codCliente;
+    char nome[MAX_LENGTH];
+    char cpf[MAX_LENGTH];
+    char telefone[MAX_LENGTH];
+    char endereco[MAX_LENGTH];
+    char cep[MAX_LENGTH];
+    char cidade[MAX_LENGTH];
+    char estado[MAX_LENGTH];
+} ClienteTemp;
 
 
 //stupid stuff
 int k;
 double sin() ,cos();
 
+//Personalização
+void corDoSelected(){
+     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
 
+void corDoSelection(){
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
+}
+
+//Base
 void handleSelection(int key) {
     switch (key) {
         case 'w':
@@ -65,9 +87,9 @@ void printMenu(int currentChoice) {
 
     for (int i = 1; i <= maxChoice; i++) {
         if (i == currentChoice) {
-            SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+             corDoSelected();
         } else {
-            SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
+            corDoSelection();
         }
         switch (i) {
             case 1:
@@ -107,9 +129,9 @@ void printCadastrar(int currentChoice, Cliente *clientes) {
 
     for (int i = 1; i <= maxChoice; i++) {
         if (i == currentChoice) {
-            SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            corDoSelected();
         } else {
-            SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
+            corDoSelection();
         }
 
         switch (i) {
@@ -167,7 +189,8 @@ void sendToTxtFile(Cliente *clientes) {
 
     while (fgets(buffer, sizeof(buffer), arquivoOriginal) != NULL) {
         if (linhaAtual == numeroLinha) {
-            fprintf(arquivoNovo, "%i,%s,%s,%s,%s,%s,%s,%s\n", codCliente, clientes[codCliente].nome, clientes[codCliente].cpf, clientes[codCliente].telefone, clientes[codCliente].endereco, clientes[codCliente].cep, clientes[codCliente].cidade, clientes[codCliente].estado);
+            fprintf(arquivoNovo, "%i,%s,%s,%s,%s,%s,%s,%s\n", codCliente, clientes[codCliente].nome, clientes[codCliente].cpf, clientes[codCliente].telefone,
+            clientes[codCliente].endereco, clientes[codCliente].cep, clientes[codCliente].cidade, clientes[codCliente].estado);
         } else {
             fprintf(arquivoNovo, "%s", buffer);
         }
@@ -215,7 +238,7 @@ void printPesquisar(int currentChoice) {
 
     for (int i = 1; i <= maxChoice; i++) {
         if (i == currentChoice) {
-            SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            corDoSelected();
         } else {
             SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
         }
@@ -230,49 +253,95 @@ void printPesquisar(int currentChoice) {
         }
     }
     
-    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
-    printf("\n>>> Use as setas ou 'W'/'S' para selecionar uma opcao e pressione 'Enter' para confirmar:\n");
+    corDoSelection();
+    printf("\n>>> Use as setas ou 'W'/'S' para selecionar uma opcao e pressione 'Enter' para confirmar.\n");
 }
 
-void procurar(char cpf[14]){
-    FILE *arquivo = fopen("test2.txt", "r");
+void imprimirCliente(ClienteTemp cliente) {
+    printf("Codigo do cliente: %d\n", cliente.codCliente);
+    printf("Nome: %s\n", cliente.nome);
+    printf("CPF: %s\n", cliente.cpf);
+    printf("Telefone: %s\n", cliente.telefone);
+    printf("Endereco: %s\n", cliente.endereco);
+    printf("CEP: %s\n", cliente.cep);
+    printf("Cidade: %s\n", cliente.cidade);
+    printf("Estado: %s\n", cliente.estado);
 
-    struct Cliente encontrado;
-    int encontrou = 0;
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
+    printf("\n>>> Pressione qualquer tecla para sair.");
+    _getch();
+}
 
-    while (fscanf(arquivo, "%d,%20[^,],%14[^,],%19[^,],%49[^,],%9[^,],%29[^,],%1[^\n]",
-                  codCliente, encontrado.nome, encontrado.cpf,
-                  encontrado.telefone, encontrado.endereco, encontrado.cep,
-                  encontrado.cidade, encontrado.estado) == 8) {
+void limparCPF(char *cpf) {
+    int i, j = 0;
+    char cpfNumerico[MAX_LENGTH];
 
-        if (strcmp(encontrado.cpf, cpf) == 0) {
-            encontrou = 1;
+    for (i = 0; cpf[i] != '\0'; i++) {
+        if (isdigit(cpf[i])) {
+            cpfNumerico[j++] = cpf[i];
+        }
+    }
+
+    cpfNumerico[j] = '\0';
+    strcpy(cpf, cpfNumerico);
+}
+
+void formatarCPF(char *cpf) {
+    char cpfFormatado[15];
+    snprintf(cpfFormatado, sizeof(cpfFormatado), "%c%c%c.%c%c%c.%c%c%c-%c%c", cpf[0], cpf[1], cpf[2], cpf[3], cpf[4],
+             cpf[5], cpf[6], cpf[7], cpf[8], cpf[9], cpf[10], cpf[11]);
+    strcpy(cpf, cpfFormatado);
+}
+
+ClienteTemp pesquisarClientePorCPF(char *cpf, FILE *arquivo) {
+    ClienteTemp clienteEncontrado;
+    FILE *arq = arquivo;
+
+    limparCPF(cpf);
+    ClienteTemp clienteTemp;
+
+    // Reiniciamos o ponteiro do arquivo para o início
+    fseek(arq, 0, SEEK_SET);
+
+    // linha de identificação
+    char buffer[MAX_LENGTH];
+    fgets(buffer, sizeof(buffer), arq);
+
+    clienteEncontrado.codCliente = -1;
+
+    // Loop para achar
+    while (fscanf(arq, "%d,%99[^,],%99[^,],%99[^,],%99[^,],%99[^,],%99[^,],%99[^\n]", &clienteTemp.codCliente, clienteTemp.nome, clienteTemp.cpf,
+    clienteTemp.telefone, clienteTemp.endereco, clienteTemp.cep, clienteTemp.cidade, clienteTemp.estado) == 8) {
+
+        limparCPF(clienteTemp.cpf);
+
+        if (strcmp(clienteTemp.cpf, cpf) == 0) {
+            clienteEncontrado = clienteTemp;
             break;
         }
     }
 
-    if (encontrou) {
-        printf("Cliente encontrado:\n");
-        printf("Código do Cliente: %d\n", codCliente);
-        printf("Nome: %s\n", encontrado.nome);
-        printf("CPF: %s\n", encontrado.cpf);
-        printf("Telefone: %s\n", encontrado.telefone);
-        printf("Endereço: %s\n", encontrado.endereco);
-        printf("CEP: %s\n", encontrado.cep);
-        printf("Cidade: %s\n", encontrado.cidade);
-        printf("Estado: %s\n", encontrado.estado);
+    fclose(arq);
 
-        Sleep(1500);
+    return clienteEncontrado;
+}
 
-        printf("\nPressione qualquer tecla para continuar...");
-        getchar();
+void procurarCPF() {
+    FILE *arquivo = fopen("test2.txt", "r");
+
+    char cpfPesquisado[MAX_LENGTH];
+    printf("Digite o CPF do cliente que deseja pesquisar: ");
+    scanf("%s", cpfPesquisado);
+
+    ClienteTemp clienteEncontrado = pesquisarClientePorCPF(cpfPesquisado, arquivo);
+
+    if (clienteEncontrado.codCliente == -1) {
+        printf("Cliente com CPF %s não encontrado.\n", cpfPesquisado);
     } else {
-        printf("Cliente com CPF %s não encontrado.\n", cpf);
-
-        Sleep(1500);
-
-        printf("\nPressione qualquer tecla para continuar...");
-        getchar();
+        formatarCPF(clienteEncontrado.cpf);
+        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
+        printf("\nCliente encontrado:\n\n");
+        imprimirCliente(clienteEncontrado);
     }
 
     fclose(arquivo);
@@ -298,7 +367,7 @@ void printDonut() {
 	float A=0, B=0, i, j, z[1760];
     char b[1760];
     system("cls");
-    for(; ; ) {
+    while(1) {
         memset(b,32,1760);
         memset(z,0,7040);
         for(j=0; 6.28>j; j+=0.07) {
@@ -334,6 +403,11 @@ void printDonut() {
 
 int main() {
 
+    CONSOLE_CURSOR_INFO cursorInfo;
+    cursorInfo.dwSize = 100;
+    cursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
+
     int numClientes = 50;
     struct Cliente *clientes = NULL;
     free(clientes);
@@ -365,43 +439,43 @@ int main() {
                     			case 2:
                     				printf(">>> Digite seu nome: ");
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].nome, sizeof(clientes[codCliente].nome)+1, stdin);
+                                    fgets(clientes[codCliente].nome, sizeof(clientes[codCliente].nome), stdin);
                                     clientes[codCliente].nome[strcspn(clientes[codCliente].nome, "\n")] = '\0';
                     				break;
                     			case 3:
                     				printf(">>> Digite seu CPF:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].cpf, sizeof(clientes[codCliente].cpf)+1, stdin);
+                                    fgets(clientes[codCliente].cpf, sizeof(clientes[codCliente].cpf), stdin);
                                     clientes[codCliente].cpf[strcspn(clientes[codCliente].cpf, "\n")] = '\0';
                     				break;
                                 case 4:
                                    printf(">>> Digite seu telefone:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].telefone, sizeof(clientes[codCliente].telefone)+1, stdin);
+                                    fgets(clientes[codCliente].telefone, sizeof(clientes[codCliente].telefone), stdin);
                                     clientes[codCliente].telefone[strcspn(clientes[codCliente].telefone, "\n")] = '\0';
                     				break;
                                 case 5:
                     				printf(">>> Digite seu endereco:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].endereco, sizeof(clientes[codCliente].endereco)+1, stdin);
+                                    fgets(clientes[codCliente].endereco, sizeof(clientes[codCliente].endereco), stdin);
                                     clientes[codCliente].endereco[strcspn(clientes[codCliente].endereco, "\n")] = '\0';
                     				break;
                                 case 6:
                     				printf(">>> Digite seu cep:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].cep, sizeof(clientes[codCliente].cep)+1, stdin);
+                                    fgets(clientes[codCliente].cep, sizeof(clientes[codCliente].cep), stdin);
                                     clientes[codCliente].cep[strcspn(clientes[codCliente].cep, "\n")] = '\0';
                     				break;
                                 case 7:
                     				printf(">>> Digite sua cidade:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].cidade, sizeof(clientes[codCliente].cidade)+1, stdin);
+                                    fgets(clientes[codCliente].cidade, sizeof(clientes[codCliente].cidade), stdin);
                                     clientes[codCliente].cidade[strcspn(clientes[codCliente].cidade, "\n")] = '\0';
                     				break;
                                 case 8:
                     				printf(">>> Digite seu estado:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].estado, sizeof(clientes[codCliente].estado)+1, stdin);
+                                    fgets(clientes[codCliente].estado, sizeof(clientes[codCliente].estado), stdin);
                                     clientes[codCliente].estado[strcspn(clientes[codCliente].estado, "\n")] = '\0';
                     				break;
                                 case 10:
@@ -432,15 +506,13 @@ int main() {
                     		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
                     		switch (choice) { 
                     			case 1: 
-                                    char cpfProcurado[14];
-                    				printf(">>> Digite o CPF: ");
-                    				scanf("%i", &cpfProcurado);
-                                    procurar(cpfProcurado);
+                                    procurarCPF();
                     				break;
                                 case 2:
-                                printf(">>> Saindo...");
-                                choice = 1;
-                                escape = true;
+                                    printf(">>> Saindo...");
+                                    choice = 1;
+                                    escape = true;
+                                    break;
 							}
 						}
 						else if(key == 27){
@@ -477,4 +549,3 @@ int main() {
 
     return 0;
 }
-

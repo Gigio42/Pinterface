@@ -1,14 +1,19 @@
 codCliente,Nome,CPF,Telefone,Endereço,Cep,Cidade,estado
 1,Fulano,173.283.182-12,(99)17384-3823,R.foo,3271-218,S�o_Paulo,SP
-2,Deutrano,www,(11)32932-0432,R.foo,9421-384,Indaiatuba,SP
-3,aaa,,,,,,
-4,aa,,,,,,
-5,teste,123,321,431,,,
-6,aaa,bbb,ccc,ddd,eee,fff,gg
-7,hhh,iii,jjj,kkk,lll,mmm,nn
-8,,123.123.123-1,(11)99340-032,231312312312312312312,,,
-9,,123.123.123-12,,,,,
-10,,,,,,,
+2,Deutrano,142.125.974-13,(11)32932-0432,R.foo,9421-384,Indaiatuba,SP
+3,Zicaaxt,123.512.512-31,(11)12345-1234,cu,12345-123SaoPaulo,SaoPaulo,SP
+4,Ciclano,236.123.643-83,(11)99231-1947,R.foo,18231-843,Jabaquara,SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
