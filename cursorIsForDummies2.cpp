@@ -1,14 +1,14 @@
-#include <windows.h>
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
+#include <conio.h>
 #include <string.h>
-#include <math.h>
-#include <ctype.h>
+#include <windows.h>
 
-#define MAX_LENGTH 100
+#define MAX_LENGTH 1024
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+void editar();
 
 char logo[] =
         " /## /########                           /##                          \n"
@@ -47,11 +47,6 @@ typedef struct {
     char estado[MAX_LENGTH];
 } ClienteTemp;
 
-
-//stupid stuff
-int k;
-double sin() ,cos();
-
 //Personalização
 void corDoSelected(){
      SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE);
@@ -83,7 +78,7 @@ void printMenu(int currentChoice) {
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
     printf("[=========================== Menu Inicial ============================]\n\n");
     
-    maxChoice = 6;
+    maxChoice = 5;
 
     for (int i = 1; i <= maxChoice; i++) {
         if (i == currentChoice) {
@@ -93,29 +88,25 @@ void printMenu(int currentChoice) {
         }
         switch (i) {
             case 1:
-                printf("<< [Cadastrar] >>\n");
+                printf("<< [Cadastrar]          >>\n");
                 break;
             case 2:
-                printf("<< [Pesquisar] >>\n");
+                printf("<< [Pesquisar]          >>\n");
                 break;
             case 3:
-                printf("<< [Editar]    >>\n");
+                printf("<< [Editar]             >>\n");
                 break;
             case 4:
-                printf("<< [Donut!]    >>\n");
+                printf("<< [Apagar/Recuperar]   >>\n");
                 break;
             case 5:
-                printf("<< [Apagar]    >>\n");
-                break;
-            case 6:
-                printf("<< [Sair]      >>\n");
+                printf("<< [Sair]               >>\n");
                 break;
         }
     }
 
-    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
-    //printf("\n>>> Use as setas ou 'W'/'S' para selecionar uma opcao e pressione 'Enter' para confirmar:\n");
-    printf("\n[w/s]:mover [Esc]:voltar\n[Enter]: Selecionar\n");
+    corDoSelection();
+    printf("\n[w/s|setas]:Mover [Esc]:Sair\n[Enter]:Selecionar\n");
 }
 
 //Cadastro
@@ -125,7 +116,7 @@ void printCadastrar(int currentChoice, Cliente *clientes) {
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
     printf("[========================== Modo Cadastrar ===========================]\n\n");
     
-    maxChoice = 12;
+    maxChoice = 11;
 
     for (int i = 1; i <= maxChoice; i++) {
         if (i == currentChoice) {
@@ -159,23 +150,17 @@ void printCadastrar(int currentChoice, Cliente *clientes) {
             case 8:
                 printf(" [Estado]............: %s\n", clientes[codCliente].estado);
                 break;
-            case 9:
-                printf(" [Observacao]........: \n\n");
-                break;
             case 10:
                 printf(" [Registrar]\n");
                 break;
             case 11:
-                printf(" [Apagar]\n");
-                break;
-            case 12:
                 printf(" [Voltar]\n");
                 break;
         }
     }
     
-    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
-    printf("\n>>> Use as setas ou 'W'/'S' para selecionar uma opcao e pressione 'Enter' para confirmar:\n");
+    corDoSelection();
+    printf("\n>>> Use as setas ou 'W'/'S' para selecionar uma opcao e pressione 'Enter' para confirmar.\n");
 }    
 
 void sendToTxtFile(Cliente *clientes) {
@@ -195,6 +180,7 @@ void sendToTxtFile(Cliente *clientes) {
             fprintf(arquivoNovo, "%s", buffer);
         }
         linhaAtual++;
+        
     }
 
     fclose(arquivoOriginal);
@@ -347,58 +333,247 @@ void procurarCPF() {
     fclose(arquivo);
 }
 
-//Todo
-void printEditar() {
+//Edição
+void printEditar(int currentChoice) {
 	system("cls");
-    printf("========= Modo Editar =========\n");
-    //TODO
-    scanf("%d", &choice);
-}
+    printf("%s\n", logo);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    printf("[========================== Modo Editar ===========================]\n\n");
+    
+    maxChoice = 2;
 
-void printApagar() {
-	system("cls");
-    printf("========= Modo Apagar =========\n");
-    //TODO
-    scanf("%d", &choice);
-}
-
-void printDonut() {
-	
-	float A=0, B=0, i, j, z[1760];
-    char b[1760];
-    system("cls");
-    while(1) {
-        memset(b,32,1760);
-        memset(z,0,7040);
-        for(j=0; 6.28>j; j+=0.07) {
-            for(i=0; 6.28 >i; i+=0.02) {
-                float sini=sin(i),
-                      cosj=cos(j),
-                      sinA=sin(A),
-                      sinj=sin(j),
-                      cosA=cos(A),
-                      cosj2=cosj+2,
-                      mess=1/(sini*cosj2*sinA+sinj*cosA+5),
-                      cosi=cos(i),
-                      cosB=cos(B),
-                      sinB=sin(B),
-                      t=sini*cosj2*cosA-sinj* sinA;
-                int x=40+30*mess*(cosi*cosj2*cosB-t*sinB),
-                    y= 12+15*mess*(cosi*cosj2*sinB +t*cosB),
-                    o=x+80*y,
-                    N=8*((sinj*sinA-sini*cosj*cosA)*cosB-sini*cosj*sinA-sinj*cosA-cosi *cosj*sinB);
-                if(22>y&&y>0&&x>0&&80>x&&mess>z[o]){
-                    z[o]=mess;
-                    b[o]=".,-~:;=!*#$@"[N>0?N:0];
-                }
-            }
+    for (int i = 1; i <= maxChoice; i++) {
+        if (i == currentChoice) {
+            corDoSelected();
+        } else {
+            SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
         }
-        printf("\x1b[d");
-        for(k=0; 1761>k; k++)
-            putchar(k%80?b[k]:10);
-        A+=0.04;
-        B+= 0.02;
+
+        switch (i) {
+            case 1:
+            	printf(" [Editar por CPF]\n");
+                break;
+            case 2:
+                printf(" [Voltar]\n");
+                break;
+        }
     }
+    
+    corDoSelection();
+    printf("\n>>> Use as setas ou 'W'/'S' para selecionar uma opcao e pressione 'Enter' para confirmar.\n");
+}
+
+void sendToTmpFile(ClienteTemp clientes, char mode) {
+    FILE *arquivoOriginal = fopen("test2.txt", "r");
+    FILE *arquivoNovo = fopen("temporario.txt", "w");
+
+    int numeroLinha = clientes.codCliente;
+
+    char buffer[1024];
+    int linhaAtual = 0;
+
+    while (fgets(buffer, sizeof(buffer), arquivoOriginal) != NULL) {
+        if (linhaAtual == numeroLinha) {
+            if(mode == '+'){
+                fprintf(arquivoNovo, "%i,%s,%s,%s,%s,%s,%s,%s\n", clientes.codCliente, clientes.nome, clientes.cpf, clientes.telefone,
+                clientes.endereco, clientes.cep, clientes.cidade, clientes.estado);
+            } else if(mode == '-') {
+                fprintf(arquivoNovo, "%i,usuarioDeletado,000.000.000-0%i,(00)00000-0000,EnderecoDeletado,00000-000,CidadeDeletada,AA\n", clientes.codCliente, clientes.codCliente);
+            }
+        } else {
+            fprintf(arquivoNovo, "%s", buffer);
+        }
+        linhaAtual++;
+        
+    }
+
+    fclose(arquivoOriginal);
+    fclose(arquivoNovo);
+
+    remove("test2.txt");
+    rename("temporario.txt", "test2.txt");
+}
+
+void editar() {
+    FILE *arquivoOriginal = fopen("test2.txt", "r");
+    FILE *arquivoTemporario = fopen("temporario.txt", "w");
+
+    char cpfPesquisado[15];
+    printf("Digite o CPF do cliente editar: ");
+    scanf("%s", cpfPesquisado);
+
+    ClienteTemp clienteEncontrado = pesquisarClientePorCPF(cpfPesquisado, arquivoOriginal);
+
+    if (clienteEncontrado.codCliente == -1) {
+        printf("Cliente nao encontrado.\n");
+        fclose(arquivoOriginal);
+        fclose(arquivoTemporario);
+        return;
+    }
+
+    formatarCPF(clienteEncontrado.cpf);
+
+    char campoAtualizar[10];
+    printf("Digite o nome do campo que deseja atualizar: ");
+    scanf("%s", campoAtualizar);
+
+    char novoValor[30];
+    printf("Digite o novo valor: ");
+    scanf("%s", novoValor);
+
+    if (strcmp(campoAtualizar, "nome") == 0) {
+        strcpy(clienteEncontrado.nome, novoValor);
+    } else if (strcmp(campoAtualizar, "cpf") == 0) {
+        strcpy(clienteEncontrado.cpf, novoValor);
+    } else if (strcmp(campoAtualizar, "telefone") == 0) {
+        strcpy(clienteEncontrado.telefone, novoValor);
+    } else if (strcmp(campoAtualizar, "endereco") == 0) {
+        strcpy(clienteEncontrado.endereco, novoValor);
+    } else if (strcmp(campoAtualizar, "cep") == 0) {
+        strcpy(clienteEncontrado.cep, novoValor);
+    } else if (strcmp(campoAtualizar, "cidade") == 0) {
+        strcpy(clienteEncontrado.cidade, novoValor);
+    } else if (strcmp(campoAtualizar, "estado") == 0) {
+        strcpy(clienteEncontrado.estado, novoValor);
+    }
+
+    sendToTmpFile(clienteEncontrado, '+');
+
+    fclose(arquivoOriginal);
+    fclose(arquivoTemporario);
+
+    remove("test2.txt");
+    rename("temporario.txt", "test2.txt");
+}
+
+//Apagar
+void printApagar(int currentChoice) {
+	system("cls");
+    printf("%s\n", logo);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    printf("[========================== Modo Apagar ===========================]\n\n");
+    
+    maxChoice = 3;
+
+    for (int i = 1; i <= maxChoice; i++) {
+        if (i == currentChoice) {
+            corDoSelected();
+        } else {
+            SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | 0);
+        }
+
+        switch (i) {
+            case 1:
+            	printf(" [Apagar por CPF]\n");
+                break;
+            case 2:
+            	printf(" [Recuperar por CPF]\n");
+                break;
+            case 3:
+                printf(" [Voltar]\n");
+                break;
+        }
+    }
+    
+    corDoSelection();
+    printf("\n>>> Use as setas ou 'W'/'S' para selecionar uma opcao e pressione 'Enter' para confirmar.\n");
+}
+
+void sendToExcl() {
+    FILE *arquivoOriginal = fopen("test2.txt", "r");
+    FILE *arquivoTemporario = fopen("temporario.txt", "w");
+    FILE *arquivoExcluidos = fopen("excluidos.txt", "a");
+
+    char cpfPesquisado[15];
+    printf("Digite o CPF do cliente a ser removido: ");
+    scanf("%s", cpfPesquisado);
+
+    ClienteTemp clienteEncontrado = pesquisarClientePorCPF(cpfPesquisado, arquivoOriginal);
+
+    if (clienteEncontrado.codCliente == -1) {
+        printf("Cliente nao encontrado.\n");
+        fclose(arquivoOriginal);
+        fclose(arquivoTemporario);
+        fclose(arquivoExcluidos);
+        return;
+    }
+
+    formatarCPF(clienteEncontrado.cpf);
+
+    sendToTmpFile(clienteEncontrado, '-');
+
+    fprintf(arquivoExcluidos, "%d,%s,%s,%s,%s,%s,%s,%s\n",clienteEncontrado.codCliente, clienteEncontrado.nome, clienteEncontrado.cpf,
+    clienteEncontrado.telefone, clienteEncontrado.endereco, clienteEncontrado.cep,clienteEncontrado.cidade, clienteEncontrado.estado);
+
+    fclose(arquivoOriginal);
+    fclose(arquivoTemporario);
+    fclose(arquivoExcluidos);
+
+    remove("test2.txt");
+    rename("temporario.txt", "test2.txt");
+    printf("Cliente removido com sucesso!\n");
+}
+
+void eraseExcl(ClienteTemp clientes) {
+    FILE *arquivoOriginal = fopen("excluidos.txt", "r");
+    FILE *arquivoNovo = fopen("tempExcluidos.txt", "w");
+
+    int numeroLinha = clientes.codCliente;
+
+    char buffer[1024];
+    int linhaAtual = 0;
+
+    while (fgets(buffer, sizeof(buffer), arquivoOriginal) != NULL) {
+
+        int codigoClienteLinha;
+        sscanf(buffer, "%d,", &codigoClienteLinha);
+
+        if (codigoClienteLinha  == clientes.codCliente) {
+            fprintf(arquivoNovo, "\n");
+        } else {
+            fprintf(arquivoNovo, "%s", buffer);
+        }
+        linhaAtual++;
+    }
+
+    fclose(arquivoOriginal);
+    fclose(arquivoNovo);
+
+    remove("excluidos.txt");
+    rename("tempExcluidos.txt", "excluidos.txt");
+}
+
+void takeFromExcl() {
+    FILE *arquivoOriginal = fopen("test2.txt", "r");
+    FILE *arquivoTemporario = fopen("temporario.txt", "w");
+    FILE *arquivoExcluidos = fopen("excluidos.txt", "r");
+
+    char cpfPesquisado[15];
+    printf("Digite o CPF do cliente a ser recuperado: ");
+    scanf("%s", cpfPesquisado);
+
+    ClienteTemp clienteRecuperado = pesquisarClientePorCPF(cpfPesquisado, arquivoExcluidos);
+
+    if (clienteRecuperado.codCliente == -1) {
+        printf("Cliente nao encontrado nos registros excluidos.\n");
+        fclose(arquivoOriginal);
+        fclose(arquivoTemporario);
+        fclose(arquivoExcluidos);
+        return;
+    }
+
+    formatarCPF(clienteRecuperado.cpf);
+
+    sendToTmpFile(clienteRecuperado, '+');
+
+    eraseExcl(clienteRecuperado);
+
+    fclose(arquivoOriginal);
+    fclose(arquivoTemporario);
+    fclose(arquivoExcluidos);
+
+    remove("test2.txt");
+    rename("temporario.txt", "test2.txt");
 }
 
 int main() {
@@ -482,8 +657,7 @@ int main() {
                                     sendToTxtFile(clientes);
                                     setCodCliente();
                                     break;
-                    			case 12:
-                    				printf(">>> Saindo...");
+                    			case 11:
                                     choice = 1;
                     				escape = true;
 							}
@@ -524,15 +698,63 @@ int main() {
 					}while(!escape);
                     break;
                 case 3:
-                    printEditar();
+                    do{
+                		SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);   
+                    	printEditar(choice);
+                    	key = _getch();
+                    	
+                    	if (key == 13){
+                    		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+                    		switch (choice) { 
+                    			case 1: 
+                                    editar();
+                    				break;
+                                case 2:
+                                    printf(">>> Saindo...");
+                                    choice = 1;
+                                    escape = true;
+                                    break;
+							}
+						}
+						else if(key == 27){
+							escape = true;
+						}
+						else{
+							handleSelection(key);
+						}
+					}while(!escape);
                     break;
                 case 4:
-                    printDonut();
+                    do{
+                		SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);   
+                    	printApagar(choice);
+                    	key = _getch();
+                    	
+                    	if (key == 13){
+                    		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+                    		switch (choice) { 
+                    			case 1: 
+                                    sendToExcl();
+                    				break;
+                                case 2: 
+                                    takeFromExcl();
+                    				break;
+                                case 3:
+                                    printf(">>> Saindo...");
+                                    choice = 1;
+                                    escape = true;
+                                    break;
+							}
+						}
+						else if(key == 27){
+							escape = true;
+						}
+						else{
+							handleSelection(key);
+						}
+					}while(!escape);
                     break;
                 case 5:
-                    printApagar();
-                    break;
-                case 6:
                     printf("Saindo do programa\n");
                     Sleep(10);
                     return 1;

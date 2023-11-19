@@ -16,8 +16,8 @@ void applyCreditCardMask(char *input, char *maskedInput) {
 }
 
 int main() {
-    char creditCardNumber[16]; // Tamanho do número do cartão sem a máscara
-    char maskedInput[20];      // Tamanho da máscara "xxxx-xxxx-xxxx-xxxx"
+    char creditCardNumber[16];
+    char maskedInput[20];      
     int i = 0;
 
     printf("Digite o número do cartao de credito (apenas digitos): \n");

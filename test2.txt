@@ -1,19 +1,12 @@
-codCliente,Nome,CPF,Telefone,Endereço,Cep,Cidade,estado
-1,Fulano,173.283.182-12,(99)17384-3823,R.foo,3271-218,S�o_Paulo,SP
+codCliente,Nome,CPF,Telefone,Endere�o,Cep,Cidade,estado
+1,Fulano,173.283.182-12,(99)17384-3823,R.foo,3271-218,S�o Paulo,SP
 2,Deutrano,142.125.974-13,(11)32932-0432,R.foo,9421-384,Indaiatuba,SP
-3,Zicaaxt,123.512.512-31,(11)12345-1234,cu,12345-123SaoPaulo,SaoPaulo,SP
+3,Gabriel,783.268.183-21,(11)83720-1283,R.foo,12345-123,SaoPaulo,SP
 4,Ciclano,236.123.643-83,(11)99231-1947,R.foo,18231-843,Jabaquara,SP
-
-
-
-
-
-
-
-
-
-
-
+5,Mariana,374.236.213-12,(11)26374-1234,R.foo,3742-384,Ribeirao,SP
+6,Alberto,983.374.129-28,(38)37829-2938,R.bar,12834-234,aracatuba,SP
+7,usuarioDeletado,000.000.000-07,(00)00000-0000,EnderecoDeletado,00000-000,CidadeDeletada,AA
+8,Ada,101.110.010-01,(01)10011-1011,R/home,10110-011,R/City,AS
 
 
 
