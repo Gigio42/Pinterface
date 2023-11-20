@@ -2,3 +2,4 @@ codCliente,Nome,CPF,Telefone,Endere�o,Cep,Cidade,estado
 
 7,Rafael,493.274.104-23,(11)23892-1934,Av.Marechal,19232-384,Osasco,SP
 
+
