@@ -600,6 +600,7 @@ void sendToExcl() {
         fclose(arquivoOriginal);
         fclose(arquivoTemporario);
         fclose(arquivoExcluidos);
+        remove("temporario.txt");
         return;
     }
 
@@ -709,7 +710,7 @@ int main() {
         key = _getch();
         escape = false;
 
-        if (key == 13) { // 13 codigo ASCII para Enter
+        if (key == 13) { //codigo ascii para enter
             switch (choice) {
                 case 1:
                 	do{
@@ -732,14 +733,32 @@ int main() {
                     			case 3:
                     				printf(" >>> Digite seu CPF:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].cpf, sizeof(clientes[codCliente].cpf), stdin);
-                                    clientes[codCliente].cpf[strcspn(clientes[codCliente].cpf, "\n")] = '\0';
+                                    do {
+                                        fgets(clientes[codCliente].cpf, sizeof(clientes[codCliente].cpf), stdin);
+                                        clientes[codCliente].cpf[strcspn(clientes[codCliente].cpf, "\n")] = '\0';
+
+                                            if (strlen(clientes[codCliente].cpf) < 14) {
+                                                corErro();
+                                                printf(" >>> O CPF deve ter exatamente 14 caracteres!.\n");
+                                                corSelecionado();
+                                                printf(" >>> Digite seu CPF: ");
+                                            }
+                                        } while (strlen(clientes[codCliente].cpf) < 14);
                     				break;
                                 case 4:
                                    printf(" >>> Digite seu telefone:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].telefone, sizeof(clientes[codCliente].telefone), stdin);
-                                    clientes[codCliente].telefone[strcspn(clientes[codCliente].telefone, "\n")] = '\0';
+                                    do {
+                                        fgets(clientes[codCliente].telefone, sizeof(clientes[codCliente].telefone), stdin);
+                                        clientes[codCliente].telefone[strcspn(clientes[codCliente].telefone, "\n")] = '\0';
+                                        
+                                            if (strlen(clientes[codCliente].telefone) < 14) {
+                                                corErro();
+                                                printf(" >>> O Telefone deve ter exatamente 14 caracteres!.\n");
+                                                corSelecionado();
+                                                printf(" >>> Digite seu Telefone: ");
+                                            }
+                                        } while (strlen(clientes[codCliente].telefone) < 14);
                     				break;
                                 case 5:
                     				printf(" >>> Digite seu endereco:" );
@@ -748,10 +767,19 @@ int main() {
                                     clientes[codCliente].endereco[strcspn(clientes[codCliente].endereco, "\n")] = '\0';
                     				break;
                                 case 6:
-                    				printf(" >>> Digite seu cep:" );
+                    				printf(" >>> Digite seu CEP:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].cep, sizeof(clientes[codCliente].cep), stdin);
-                                    clientes[codCliente].cep[strcspn(clientes[codCliente].cep, "\n")] = '\0';
+                                    do {
+                                        fgets(clientes[codCliente].cep, sizeof(clientes[codCliente].cep), stdin);
+                                        clientes[codCliente].cep[strcspn(clientes[codCliente].cep, "\n")] = '\0';
+                                        
+                                            if (strlen(clientes[codCliente].cep) < 9) {
+                                                corErro();
+                                                printf(" >>> O CEP deve ter exatamente 9 caracteres!.\n");
+                                                corSelecionado();
+                                                printf(" >>> Digite seu CEP: ");
+                                            }
+                                        } while (strlen(clientes[codCliente].cep) < 9);
                     				break;
                                 case 7:
                     				printf(" >>> Digite sua cidade:" );
@@ -760,10 +788,19 @@ int main() {
                                     clientes[codCliente].cidade[strcspn(clientes[codCliente].cidade, "\n")] = '\0';
                     				break;
                                 case 8:
-                    				printf(" >>> Digite seu estado:" );
+                    				printf(" >>> Digite seu Estado:" );
                     				fflush(stdin);
-                                    fgets(clientes[codCliente].estado, sizeof(clientes[codCliente].estado), stdin);
-                                    clientes[codCliente].estado[strcspn(clientes[codCliente].estado, "\n")] = '\0';
+                                    do {
+                                        fgets(clientes[codCliente].estado, sizeof(clientes[codCliente].estado), stdin);
+                                        clientes[codCliente].estado[strcspn(clientes[codCliente].estado, "\n")] = '\0';
+                                        
+                                            if (strlen(clientes[codCliente].estado) < 2) {
+                                                corErro();
+                                                printf(" >>> O Estado deve ter exatamente 14 caracteres!.\n");
+                                                corSelecionado();
+                                                printf(" >>> Digite seu Estado: ");
+                                            }
+                                        } while (strlen(clientes[codCliente].estado) < 2);
                     				break;
                                 case 9:
                                     sendToTxtFile(clientes);
