@@ -48,7 +48,7 @@ typedef struct {
     char estado[MAX_LENGTH];
 } ClienteTemp;
 
-//Personalização
+//Personalização e customização
 void corLogo(){
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
 }
@@ -72,6 +72,69 @@ void pausarNotif(){
     corOpcao();
     printf("\n >>> Pressione qualquer tecla para sair.");
     _getch();
+}
+
+void aplicarMascara(char *input, char *maskedInput) {
+    int j = 0;
+
+    for (int i = 0; input[i] != '\0'; ++i) {
+        if (i == 3 || i == 6) {
+            maskedInput[j++] = '.';
+        } else if (i == 9) {
+            maskedInput[j++] = '-';
+        }
+        maskedInput[j++] = input[i];
+    }
+    maskedInput[j] = '\0';
+}
+
+void apagarVisualmente(int n) {
+    for (int i = 0; i < n; ++i) {
+        printf("\b \b"); // 1 \b para mover o cursor para trás, o segundo para apagar
+    }
+}
+
+void mascaraCPF(Cliente *clientes){
+    char cpf[12];
+    char mascara[15];      
+    int i = 0;
+
+    HANDLE hStdin;
+    DWORD mode; //guarda o modo que está
+
+    hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(hStdin, &mode); // 
+    SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT) & (~ENABLE_LINE_INPUT)); //termina a execução sem precisar apertar enter e desabilita entrada padrão de caracteres
+
+    printf(" >>>Digite o CPF: \n");
+
+    while (1) {
+        char ch;
+        DWORD read; //guarda o total de variaveis
+
+        ReadConsole(hStdin, &ch, 1, &read, NULL); //guarda um char em ch, 1 por vez, no read
+
+        if (ch == '\b') { // Quando apertar back para apagar
+            if (i > 0) {
+                --i;
+                cpf[i] = '\0'; // define o caracter atual como fim da string '\0' para poder apagar
+                aplicarMascara(cpf, mascara);
+                apagarVisualmente(strlen(mascara) + 1);
+            }
+        } else if (ch >= '0' && ch <= '9' && i < 11) {
+            cpf[i++] = ch;
+        }
+
+        aplicarMascara(cpf, mascara);
+        printf("\r >>>CPF: %s", mascara);
+
+        if (i > 10) {
+            break;
+        }
+    }
+    SetConsoleMode(hStdin, mode); //volta o input ao padrão
+
+    strcpy(clientes[codCliente].cpf, mascara);
 }
 
 //Base
@@ -731,7 +794,7 @@ int main() {
                                     clientes[codCliente].nome[strcspn(clientes[codCliente].nome, "\n")] = '\0';
                     				break;
                     			case 3:
-                    				printf(" >>> Digite seu CPF:" );
+                    				/*printf(" >>> Digite seu CPF:" );
                     				fflush(stdin);
                                     do {
                                         fgets(clientes[codCliente].cpf, sizeof(clientes[codCliente].cpf), stdin);
@@ -743,7 +806,8 @@ int main() {
                                                 corSelecionado();
                                                 printf(" >>> Digite seu CPF: ");
                                             }
-                                        } while (strlen(clientes[codCliente].cpf) < 14);
+                                        } while (strlen(clientes[codCliente].cpf) < 14);*/
+                                        mascaraCPF(clientes);
                     				break;
                                 case 4:
                                    printf(" >>> Digite seu telefone:" );
