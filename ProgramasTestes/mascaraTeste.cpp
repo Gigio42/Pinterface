@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-void aplicarMascara(char *input, char *maskedInput) {
+void aplicarMascaraCPF(char *input, char *maskedInput) {
     int j = 0;
 
     for (int i = 0; input[i] != '\0'; ++i) {
@@ -15,7 +15,7 @@ void aplicarMascara(char *input, char *maskedInput) {
     maskedInput[j] = '\0';
 }
 
-void apagarVisualmente(int n) {
+void apagarChar(int n) {
     for (int i = 0; i < n; ++i) {
         printf("\b \b"); // Apaga visualmente um caractere
     }
@@ -45,14 +45,14 @@ int main() {
             if (i > 0) {
                 --i;
                 cpf[i] = '\0'; // Apaga o último caractere
-                aplicarMascara(cpf, maskedInput);
-                apagarVisualmente(strlen(maskedInput) + 1);
+                aplicarMascaraCPF(cpf, maskedInput);
+                apagarChar(strlen(maskedInput) + 1);
             }
         } else if (ch >= '0' && ch <= '9' && i < 11) {
             cpf[i++] = ch;
         }
 
-        aplicarMascara(cpf, maskedInput);
+        aplicarMascaraCPF(cpf, maskedInput);
         printf("\rCPF com mascara: %s", maskedInput);
 
         if (i > 10) {

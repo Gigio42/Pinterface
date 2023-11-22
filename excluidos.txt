@@ -1,5 +1,4 @@
 codCliente,Nome,CPF,Telefone,Endere�o,Cep,Cidade,estado
 
 7,Rafael,493.274.104-23,(11)23892-1934,Av.Marechal,19232-384,Osasco,SP
-
-
+12,Candida,237.236.478-12,(99)99999-9999,asdad,99999-999,1234567891234567891,SP

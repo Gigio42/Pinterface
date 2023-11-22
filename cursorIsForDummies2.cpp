@@ -49,6 +49,7 @@ typedef struct {
 } ClienteTemp;
 
 //Personalização e customização
+//cores & screenlock
 void corLogo(){
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
 }
@@ -74,7 +75,14 @@ void pausarNotif(){
     _getch();
 }
 
-void aplicarMascara(char *input, char *maskedInput) {
+//Mascaras
+void apagarChar(int n) {
+    for (int i = 0; i < n; ++i) {
+        printf("\b \b"); // 1 \b para mover o cursor para trás, o segundo para apagar
+    }
+}
+
+void aplicarMascaraCPF(char *input, char *maskedInput) {
     int j = 0;
 
     for (int i = 0; input[i] != '\0'; ++i) {
@@ -86,12 +94,6 @@ void aplicarMascara(char *input, char *maskedInput) {
         maskedInput[j++] = input[i];
     }
     maskedInput[j] = '\0';
-}
-
-void apagarVisualmente(int n) {
-    for (int i = 0; i < n; ++i) {
-        printf("\b \b"); // 1 \b para mover o cursor para trás, o segundo para apagar
-    }
 }
 
 void mascaraCPF(Cliente *clientes){
@@ -114,18 +116,18 @@ void mascaraCPF(Cliente *clientes){
 
         ReadConsole(hStdin, &ch, 1, &read, NULL); //guarda um char em ch, 1 por vez, no read
 
-        if (ch == '\b') { // Quando apertar back para apagar
+        if (ch == '\b') { //Quando apertar back
             if (i > 0) {
                 --i;
                 cpf[i] = '\0'; // define o caracter atual como fim da string '\0' para poder apagar
-                aplicarMascara(cpf, mascara);
-                apagarVisualmente(strlen(mascara) + 1);
+                aplicarMascaraCPF(cpf, mascara);
+                apagarChar(strlen(mascara) + 1); //de onde está, 1 pra frente
             }
         } else if (ch >= '0' && ch <= '9' && i < 11) {
             cpf[i++] = ch;
         }
 
-        aplicarMascara(cpf, mascara);
+        aplicarMascaraCPF(cpf, mascara);
         printf("\r >>>CPF: %s", mascara);
 
         if (i > 10) {
@@ -137,6 +139,127 @@ void mascaraCPF(Cliente *clientes){
     strcpy(clientes[codCliente].cpf, mascara);
 }
 
+void aplicarMascaraTelefone(char *input, char *maskedInput) {
+    int j = 0;
+
+    for (int i = 0; input[i] != '\0'; ++i) {
+        if (i == 0) {
+            maskedInput[j++] = '(';
+            maskedInput[j++] = input[i];
+        } else if (i == 2) {
+            maskedInput[j++] = ')';
+            maskedInput[j++] = input[i];
+        } else if (i == 7) {
+            maskedInput[j++] = '-';
+            maskedInput[j++] = input[i];
+        } else {
+            maskedInput[j++] = input[i];
+        }
+    }
+    maskedInput[j] = '\0';
+}
+
+void mascaraTelefone(Cliente *clientes) {
+    char telefone[12];
+    char mascara[15];
+    int i = 0;
+
+    HANDLE hStdin;
+    DWORD mode;
+
+    hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(hStdin, &mode);
+    SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT) & (~ENABLE_LINE_INPUT));
+
+    printf(" >>>Digite o telefone: \n");
+
+    while (1) {
+        char ch;
+        DWORD read;
+
+        ReadConsole(hStdin, &ch, 1, &read, NULL);
+
+        if (ch == '\b') {
+            if (i > 0) {
+                --i;
+                telefone[i] = '\0';
+                aplicarMascaraTelefone(telefone, mascara);
+                apagarChar(strlen(mascara) + 1);
+            }
+        } else if (ch >= '0' && ch <= '9' && i < 11) {
+            telefone[i++] = ch;
+        }
+
+        aplicarMascaraTelefone(telefone, mascara);
+        printf("\r >>>Telefone: %s", mascara);
+
+        if (i > 10) {
+            break;
+        }
+    }
+    SetConsoleMode(hStdin, mode);
+
+    strcpy(clientes[codCliente].telefone, mascara);
+}
+
+void aplicarMascaraCEP(char *input, char *maskedInput) {
+    int j = 0;
+
+    for (int i = 0; input[i] != '\0'; ++i) {
+        if (i == 5) {
+            maskedInput[j++] = '-';
+            maskedInput[j++] = input[i];
+        } else {
+            maskedInput[j++] = input[i];
+        }
+    }
+    maskedInput[j] = '\0';
+}
+
+void mascaraCEP(Cliente *clientes) {
+    char cep[9]; 
+    char mascara[12];
+    int i = 0;
+
+    HANDLE hStdin;
+    DWORD mode;
+
+    hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(hStdin, &mode);
+    SetConsoleMode(hStdin, mode & (~ENABLE_ECHO_INPUT) & (~ENABLE_LINE_INPUT));
+
+    printf(" >>>Digite o CEP: \n");
+
+    while (1) {
+        char ch;
+        DWORD read;
+
+        ReadConsole(hStdin, &ch, 1, &read, NULL);
+
+        if (ch == '\b') {
+            if (i > 0) {
+                --i;
+                cep[i] = '\0';
+                aplicarMascaraCEP(cep, mascara);
+                apagarChar(strlen(mascara) + 1);
+            }
+        } else if (ch >= '0' && ch <= '9' && i < 8) {
+            cep[i++] = ch;
+        }
+
+        aplicarMascaraCEP(cep, mascara);
+        printf("\r >>>CEP: %s", mascara);
+
+        if (i > 7) {
+            break;
+        }
+    }
+    SetConsoleMode(hStdin, mode);
+
+    strcpy(clientes[codCliente].cep, mascara);
+}
+
+//Projeto em si
 //Base
 void handleSelection(int key) {
     switch (key) {
@@ -794,35 +917,10 @@ int main() {
                                     clientes[codCliente].nome[strcspn(clientes[codCliente].nome, "\n")] = '\0';
                     				break;
                     			case 3:
-                    				/*printf(" >>> Digite seu CPF:" );
-                    				fflush(stdin);
-                                    do {
-                                        fgets(clientes[codCliente].cpf, sizeof(clientes[codCliente].cpf), stdin);
-                                        clientes[codCliente].cpf[strcspn(clientes[codCliente].cpf, "\n")] = '\0';
-
-                                            if (strlen(clientes[codCliente].cpf) < 14) {
-                                                corErro();
-                                                printf(" >>> O CPF deve ter exatamente 14 caracteres!.\n");
-                                                corSelecionado();
-                                                printf(" >>> Digite seu CPF: ");
-                                            }
-                                        } while (strlen(clientes[codCliente].cpf) < 14);*/
-                                        mascaraCPF(clientes);
+                                    mascaraCPF(clientes);
                     				break;
                                 case 4:
-                                   printf(" >>> Digite seu telefone:" );
-                    				fflush(stdin);
-                                    do {
-                                        fgets(clientes[codCliente].telefone, sizeof(clientes[codCliente].telefone), stdin);
-                                        clientes[codCliente].telefone[strcspn(clientes[codCliente].telefone, "\n")] = '\0';
-                                        
-                                            if (strlen(clientes[codCliente].telefone) < 14) {
-                                                corErro();
-                                                printf(" >>> O Telefone deve ter exatamente 14 caracteres!.\n");
-                                                corSelecionado();
-                                                printf(" >>> Digite seu Telefone: ");
-                                            }
-                                        } while (strlen(clientes[codCliente].telefone) < 14);
+                                    mascaraTelefone(clientes);
                     				break;
                                 case 5:
                     				printf(" >>> Digite seu endereco:" );
@@ -831,19 +929,7 @@ int main() {
                                     clientes[codCliente].endereco[strcspn(clientes[codCliente].endereco, "\n")] = '\0';
                     				break;
                                 case 6:
-                    				printf(" >>> Digite seu CEP:" );
-                    				fflush(stdin);
-                                    do {
-                                        fgets(clientes[codCliente].cep, sizeof(clientes[codCliente].cep), stdin);
-                                        clientes[codCliente].cep[strcspn(clientes[codCliente].cep, "\n")] = '\0';
-                                        
-                                            if (strlen(clientes[codCliente].cep) < 9) {
-                                                corErro();
-                                                printf(" >>> O CEP deve ter exatamente 9 caracteres!.\n");
-                                                corSelecionado();
-                                                printf(" >>> Digite seu CEP: ");
-                                            }
-                                        } while (strlen(clientes[codCliente].cep) < 9);
+                                    mascaraCEP(clientes);
                     				break;
                                 case 7:
                     				printf(" >>> Digite sua cidade:" );
@@ -860,7 +946,7 @@ int main() {
                                         
                                             if (strlen(clientes[codCliente].estado) < 2) {
                                                 corErro();
-                                                printf(" >>> O Estado deve ter exatamente 14 caracteres!.\n");
+                                                printf(" >>> O Estado deve ter exatamente 2 caracteres!.\n");
                                                 corSelecionado();
                                                 printf(" >>> Digite seu Estado: ");
                                             }

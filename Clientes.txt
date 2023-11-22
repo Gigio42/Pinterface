@@ -10,7 +10,7 @@ codCliente,Nome,CPF,Telefone,Endere�o,Cep,Cidade,estado
 9,Maria Eduarda,798.326.300-70,(16)21393-6935,Av. Marechal,13348-235,Indaiatuba,SP
 10,Z�,123.123.123-12,(11)93304-0239,Av. ABC,19283-437,Sao Paulo,SP
 11,Taina,123.784.876-53,(11)99999-9999,R aaa,12345-124,abobra,SP
-
+12,usuarioDeletado,000.000.000-012,(00)00000-0000,EnderecoDeletado,00000-000,CidadeDeletada,AA
 
 
 
