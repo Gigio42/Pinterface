@@ -11,8 +11,8 @@ codCliente,Nome,CPF,Telefone,Endereï¿½o,Cep,Cidade,estado
 10,Zï¿½,123.123.123-12,(11)93304-0239,Av. ABC,19283-437,Sao Paulo,SP
 11,Taina,123.784.876-53,(11)99999-9999,R aaa,12345-124,abobra,SP
 12,usuarioDeletado,000.000.000-012,(00)00000-0000,EnderecoDeletado,00000-000,CidadeDeletada,AA
-
-
+13,Guilherme Pereira,541.904.463-05,(19)97160-7404, Rua Z, 40,13366-802, SÆo Paulo,SP
+14,JoÆo Luccas,589.785.462-88,(11)94982-2203,casa do crlh,13346-440,Indaiatuba,SP
 
 
 

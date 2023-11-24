@@ -56,6 +56,7 @@ void corLogo(){
 void corMenu(){
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 }
+
 void corSelecionado(){
      SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
@@ -116,7 +117,7 @@ void mascaraCPF(Cliente *clientes){
 
         ReadConsole(hStdin, &ch, 1, &read, NULL); //guarda um char em ch, 1 por vez, no read
 
-        if (ch == '\b') { //Quando apertar back
+        if (ch == '\b') { //Codigo ascii para back
             if (i > 0) {
                 --i;
                 cpf[i] = '\0'; // define o caracter atual como fim da string '\0' para poder apagar
@@ -290,6 +291,7 @@ void printMenu(int currentChoice) {
              corSelecionado();
              printf(" %c",16);
         } else {
+            printf("  ");
             corOpcao();
         }
         switch (i) {
@@ -330,8 +332,9 @@ void printCadastrar(int currentChoice, Cliente *clientes) {
     for (int i = 1; i <= maxChoice; i++) {
         if (i == currentChoice) {
             corSelecionado();
-            if(i > 8) {printf(" %c",16);}
+            if(i > 8) {printf("%c",16);}
         } else {
+            if(i > 8) {printf(" ");}
             corOpcao();
         }
 
@@ -361,10 +364,10 @@ void printCadastrar(int currentChoice, Cliente *clientes) {
                 printf(" [Estado]............: %s\n\n", clientes[codCliente].estado);
                 break;
             case 9:
-                printf(" [Registrar]\n");
+                printf("[Registrar]\n");
                 break;
             case 10:
-                printf(" [Voltar]\n");
+                printf("[Voltar]\n");
                 break;
         }
     }
@@ -437,6 +440,7 @@ void printPesquisar(int currentChoice) {
             corSelecionado();
             printf(" %c",16);
         } else {
+            printf("  ");
             corOpcao();
         }
 
@@ -559,6 +563,7 @@ void printEditar(int currentChoice) {
             corSelecionado();
             printf(" %c",16);
         } else {
+            printf("  ");
             corOpcao();
         }
 
@@ -749,6 +754,7 @@ void printApagar(int currentChoice) {
             corSelecionado();
             printf(" %c",16);
         } else {
+            printf("  ");
             corOpcao();
         }
 
@@ -891,6 +897,7 @@ int main() {
     setCodCliente();
 
     char key;
+    char lock;
     do {
         printMenu(choice);
         key = _getch();
@@ -907,50 +914,62 @@ int main() {
                     		corSelecionado();
                     		switch (choice) { 
                     			case 1: 
-                    				printf(" >>> Digite o codigo do cliente: ");
-                    				scanf("%i", &codCliente);
+                                    printf(" Somente para desenvolvedor.");
+                                    lock = _getch();
+                                    if (lock == 9){
+                                        printf(" >>> Digite o codigo do cliente: ");
+                    				    scanf("%i", &codCliente);
+                                    }
                     				break;
                     			case 2:
                     				printf(" >>> Digite seu nome: ");
                     				fflush(stdin);
                                     fgets(clientes[codCliente].nome, sizeof(clientes[codCliente].nome), stdin);
                                     clientes[codCliente].nome[strcspn(clientes[codCliente].nome, "\n")] = '\0';
+                                    choice++;
                     				break;
                     			case 3:
                                     mascaraCPF(clientes);
+                                    choice++;
                     				break;
                                 case 4:
                                     mascaraTelefone(clientes);
+                                    choice++;
                     				break;
                                 case 5:
-                    				printf(" >>> Digite seu endereco:" );
+                    				printf(" >>> Digite seu endereco: " );
                     				fflush(stdin);
                                     fgets(clientes[codCliente].endereco, sizeof(clientes[codCliente].endereco), stdin);
                                     clientes[codCliente].endereco[strcspn(clientes[codCliente].endereco, "\n")] = '\0';
+                                    choice++;
                     				break;
                                 case 6:
                                     mascaraCEP(clientes);
+                                    choice++;
                     				break;
                                 case 7:
-                    				printf(" >>> Digite sua cidade:" );
+                    				printf(" >>> Digite sua cidade: " );
                     				fflush(stdin);
                                     fgets(clientes[codCliente].cidade, sizeof(clientes[codCliente].cidade), stdin);
                                     clientes[codCliente].cidade[strcspn(clientes[codCliente].cidade, "\n")] = '\0';
+                                    choice++;
                     				break;
                                 case 8:
-                    				printf(" >>> Digite seu Estado:" );
+                    				printf(" >>> Digite seu Estado: " );
                     				fflush(stdin);
                                     do {
-                                        fgets(clientes[codCliente].estado, sizeof(clientes[codCliente].estado), stdin);
+                                        fgets(clientes[codCliente].estado, sizeof(clientes
+                                        [codCliente].estado), stdin);
                                         clientes[codCliente].estado[strcspn(clientes[codCliente].estado, "\n")] = '\0';
                                         
-                                            if (strlen(clientes[codCliente].estado) < 2) {
-                                                corErro();
-                                                printf(" >>> O Estado deve ter exatamente 2 caracteres!.\n");
-                                                corSelecionado();
-                                                printf(" >>> Digite seu Estado: ");
-                                            }
-                                        } while (strlen(clientes[codCliente].estado) < 2);
+                                        if (strlen(clientes[codCliente].estado) < 2) {
+                                            corErro();
+                                            printf(" >>> O Estado deve ter exatamente 2 caracteres!.\n");
+                                            corSelecionado();
+                                            printf(" >>> Digite seu Estado: ");
+                                        }
+                                    } while (strlen(clientes[codCliente].estado) < 2);
+                                    choice++;
                     				break;
                                 case 9:
                                     sendToTxtFile(clientes);
