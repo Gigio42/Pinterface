@@ -1,0 +1,103 @@
+codCliente;Nome;CPF;Telefone;Endere o;Cep;Cidade;estado
+1;Fulano;173.283.182-12;(99)17384-3823;R.foo;3271-218;S o Paulo;SP
+2;Deutrano;142.125.974-13;(11)32932-0432;R.foo;9421-384;Indaiatuba;SP
+3;Gabriel;783.268.183-21;(11)83720-1283;R.foo;12345-123;SaoPaulo;SP
+4;Alberto;236.123.643-83;(11)99231-1947;R.foo;18231-843;Jabaquara;SP
+5;Mariana;374.236.213-12;(11)26374-1234;R.foo;3742-384;Ribeirao;SP
+6;Roberto;983.374.129-28;(38)37829-2938;R.bar;12834-234;aracatuba;SP
+7;usuarioDeletado;000.000.000-07;(00)00000-0000;EnderecoDeletado;00000-000;CidadeDeletada;AA
+8;Ada Lovelace;101.110.010-01;(01)10011-1011;R.MIT;10110-011;R/City;AS
+9;Maria Eduarda;798.326.300-70;(16)21393-6935;Av. Marechal;13348-235;Indaiatuba;SP
+10;Z ;123.123.123-12;(11)93304-0239;Av. ABC;19283-437;Sao Paulo;SP
+11;Taina;123.784.876-53;(11)99999-9999;R aaa;12345-124;abobra;SP
+12;usuarioDeletado;000.000.000-012;(00)00000-0000;EnderecoDeletado;00000-000;CidadeDeletada;AA
+13;Rafael;443.536.546-35;(34)73839-2742;Rua O, 98;12460-493;Indaiatuba;SP
+14;Jo o Luccas;589.785.462-88;(11)94982-2203;casa do crlh;13346-440;Indaiatuba;SP
+15;Gui;563.325.474-56;(43)55392-4325;Rua X, 83;24450-245;Indaiatuba;SP
+16;Mateus;433.543.523-45;(32)43423-4355;Rua C, 55;35443-543;Franca;SP
+17;     a;234.567.652-34;(23)45676-5432;R.foo;23456-432;Indaia;SP
+18;Jo o;464.545.643-67;(45)44564-9345;Rua Y, 35;34576-548;Indaiatuba;SP
+19;Muri oca;789.345.352-35;(42)32463-9434;Rua dos Zes, 342;35435-243;Indaiatuba;SP
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
