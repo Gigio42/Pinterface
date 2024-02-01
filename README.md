@@ -6,6 +6,14 @@
 
 Este projeto consiste em uma interface desenvolvida em C/C++ para o cadastro de clientes na empresa iTracker, integrada a um banco de dados Microsoft Access. O sistema oferece funcionalidades como inserção, busca, atualização, exclusão e recuperação de dados de clientes de maneira dinâmica.
 
+## Recursos extras
+
+ - Máscara de input ao colocar o CPF.
+ - Gerar um template quando um usuário é excluido.
+ - Possibilitar a recuperação de um usuário.
+ - Pulo para o próximo campo para facilitar e dinamizar o preenchimento de dados.
+ - Formatação de dados.
+
 ## Pré-requisitos
 
 Antes de iniciar, certifique-se de ter os seguintes componentes instalados em seu ambiente de desenvolvimento:
@@ -25,10 +33,7 @@ Antes de iniciar, certifique-se de ter os seguintes componentes instalados em se
 
 3. Se desejar usar a integração com o banco de dados, apenas tenha o MS Acess, não precisa criar um banco pois eles já estão dentro do repositório com dados fictícios de exemplo.
 
-## Uso
-
-1. Execute o programa compilado.
-2. Caso haja alguma necessidade de debug dos dados, como intermédio eles são passados por arquivos texto como "clientes" e "excluidos" que podem ser alterados para gerar alguma condição para fazer algum teste no programa.
+4. Caso haja alguma necessidade de debug dos dados, como intermédio eles são passados por arquivos texto como "clientes" e "excluidos" que podem ser alterados para gerar alguma condição para fazer algum teste no programa.
 
 ## Contribuição
 
